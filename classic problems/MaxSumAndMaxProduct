@@ -1,0 +1,146 @@
+/*
+
+Initialization:
+
+Initialize variables maxSum and maxSoFar.
+maxSum keeps track of the maximum sum encountered so far.
+maxSoFar is the sum of elements seen so far in the current subarray.
+start, startIndex, and endIndex are used to keep track of the start and end indices of the subarray with the maximum sum.
+Loop Through Array:
+
+Iterate over each element in the array.
+Update maxSoFar by adding the current element.
+If maxSoFar becomes negative, reset it to 0.
+If maxSoFar is greater than maxSum, update maxSum, startIndex, and endIndex.
+Return Maximum Sum:
+
+Return the maximum sum found.
+
+findProduct Method:
+Count Negative Numbers:
+
+Count the number of negative numbers in the array to determine if the final product will be positive or negative.
+Initialization:
+
+Initialize variables maxProduct and maxSoFar similar to the findSum method.
+Use maxSoFar to keep track of the sum of logarithms of absolute values of elements.
+Loop Through Array:
+
+Iterate over each element in the array.
+Update maxSoFar by adding the logarithm of the absolute value of the current element.
+If maxSoFar becomes negative, reset it to 0.
+If maxSoFar is greater than maxProduct, update maxProduct, startIndex, and endIndex.
+Return Maximum Product:
+
+Return the exponential of maxProduct as the final product. If the count of negative numbers is odd, multiply the product by -1 to make it negative.
+Example:
+Consider the input array: {-1, 2, 3, -4, 5}.
+
+For findSum method:
+
+Maximum sum is 2 + 3 = 5.
+Indices of the subarray with the maximum sum are from index 1 to index 2.
+So, the output is 5.
+For findProduct method:
+
+Maximum product is 3 * 5 = 15.
+Indices of the subarray with the maximum product are from index 2 to index 4.
+So, the output is 15.
+
+Conclusion:
+The findSum method calculates the maximum sum of a contiguous subarray, while the findProduct method calculates the maximum product of the elements in a contiguous subarray. Both methods use similar approaches with slight variations to handle different scenarios.
+
+
+
+
+Let's delve into why logarithms are used in the findProduct method to calculate the product of elements:
+
+Why Logarithms?
+Dealing with Large Numbers:
+
+When dealing with very large numbers, such as the product of multiple integers, the result may exceed the range of data types like int or double.
+Calculating the logarithm of large numbers reduces the scale of the numbers, making them easier to handle without losing precision.
+Handling Multiplication:
+
+Multiplying very large numbers together can lead to overflow or loss of precision, especially with floating-point data types.
+Taking the logarithm of each number and then summing the logarithms effectively converts multiplication into addition, which is a more stable operation.
+Logarithms Preserve Order:
+
+Logarithms have the property that the logarithm of a product is equal to the sum of logarithms.
+Mathematically, log(ab) = log(a) + log(b).
+Negative Numbers:
+
+Logarithms can handle negative numbers by taking the logarithm of the absolute value and then adjusting the sign accordingly.
+Example:
+Consider the input array: {-1, 2, 3, -4, 5}.
+
+After calculating the logarithm of the absolute value of each element, we get: {0.0, 0.693, 1.099, 1.386, 1.609}.
+
+The sum of these logarithms is 4.787.
+
+Exponentiating this sum gives us the product: exp(4.787) ≈ 120.0.
+
+Conclusion:
+Using logarithms to calculate the product of elements allows us to handle large numbers more effectively, mitigating the risk of overflow or loss of precision. It also simplifies the process of multiplication by converting it into addition, making it more computationally stable. Additionally, logarithms preserve the order of operations and can handle negative numbers appropriately.
+
+
+/*
+
+
+public class MaxSumAndMaxProduct {
+	public static void main(String[] args) {
+		int[] arr = new int[] { -1, 2, 3, -4, 5 };
+		int sum = findSum(arr);
+		System.out.println(sum);
+		Double product = findProduct(arr);
+		System.out.println(product);
+		
+	}
+
+	public static int findSum(int[] arr) {
+		int i = 0;
+		int maxSum = Integer.MIN_VALUE, maxSoFar = 0;
+		int start = 0, startIndex = 0, endIndex = 0;
+		while (i < arr.length) {
+			if (maxSoFar == 0)
+				start = i;
+			maxSoFar = maxSoFar + arr[i];
+			if (maxSoFar > maxSum) {
+				maxSum = maxSoFar;
+				startIndex = start;
+				endIndex = i;
+			}
+			i++;
+			if (maxSoFar < 0)
+				maxSoFar = 0;
+		}
+		System.out.println(startIndex + " " + endIndex);
+		return maxSum;
+	}
+
+	public static Double findProduct(int[] arr) {
+		int count = 0;
+		Double maxProduct = Double.MIN_VALUE, maxSoFar = 0.0;
+		int start = 0, startIndex = 0, endIndex = 0;
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] < 0)
+				count++;
+		}
+		for (int i = 0; i < arr.length; i++) {
+			maxSoFar += Math.log(Math.abs(arr[i]));
+			if (maxSoFar > maxProduct) {
+				maxProduct = maxSoFar;
+				startIndex = start;
+				endIndex = i;
+			}
+			if (maxSoFar < 0)
+				maxSoFar = 0.0;
+		}
+		System.out.println(startIndex + " " + endIndex);
+		if (count % 2 != 0)
+			return -1 * Math.exp(maxProduct);
+		else
+			return Math.exp(maxProduct);
+	}
+
+}

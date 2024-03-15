@@ -1,0 +1,93 @@
+/*
+
+Algorithm Explanation:
+
+Partitioning the Array:
+
+The algorithm starts by partitioning the array such that all negative integers are moved to the left side and all positive integers to the right side. It uses a partitioning technique similar to the one used in quicksort.
+
+Rearranging Alternately:
+
+After partitioning, the algorithm creates a new array called rearrangedArray.
+It then starts from the index where the positive integers start (pIndex) and alternately fills rearrangedArray with positive and negative integers from both sides of the partitioned array.
+If there are more positive integers than negative integers, the remaining positive integers are placed at the end of rearrangedArray.
+Similarly, if there are more negative integers than positive integers, the remaining negative integers are placed at the end of rearrangedArray.
+Example:
+Consider the input array: [7, -2, 6, -9, -4, -3, 5]
+
+Partitioning the Array:
+
+After partitioning, let's say the array becomes: [-2, -9, -4, -3, 7, 6, 5]. Here, the index pIndex is 4.
+
+Rearranging Alternately:
+
+Now, we start filling rearrangedArray alternately with positive and negative integers from both sides of the partitioned array.
+Starting from index 4 (where positive integers start) and index 0 (where negative integers start), we alternate filling rearrangedArray.
+After alternately filling, the rearrangedArray becomes: [-2, 7, -9, 6, -4, 5, -3].
+
+Conclusion:
+This algorithm efficiently arranges positive and negative integers alternatively in the array, preserving their relative order from the original array. The partitioning step ensures that negative integers come before positive integers, and the rearrangement step ensures an alternate arrangement of positive and negative integers.
+
+
+*/
+
+
+public class ArrangePositiveAndNegativeAlternatively {
+	public static void main(String[] args) {
+		int[] arr = new int[] {7, -2, 6, -9, -4, -3, 5};
+		arrange(arr, 0, arr.length - 1);
+	}
+	
+	public static void arrange(int[] arr, int i, int j) {
+	    int pIndex = partition(arr, i, j);
+	    System.out.println("After partitioning:");
+	    for (int num : arr) {
+	        System.out.print(num + " ");
+	    }
+	    System.out.println();
+	    
+	    int posIndex = pIndex;
+	    int negIndex = 0;
+	    int[] rearrangedArray = new int[arr.length];
+	    int k = 0;
+	    while(posIndex < arr.length && negIndex < pIndex) {
+	    	rearrangedArray[k++] = arr[posIndex];
+	    	rearrangedArray[k++] = arr[negIndex];
+	    	negIndex++;
+	    	posIndex++;
+	    }
+	    while(posIndex < arr.length) {
+	    	rearrangedArray[k++] = arr[posIndex];
+	    	posIndex++;
+	    }
+	    
+	    while(negIndex < pIndex) {
+	    	rearrangedArray[k++] = arr[negIndex];
+	    	negIndex++;
+	    }
+	    
+	    System.out.println("After rearranging:");
+	    for (int num : rearrangedArray) {
+	        System.out.print(num + " ");
+	    }
+	    System.out.println();
+	}
+
+
+	public static int partition(int[] arr, int low, int high) {
+		int i = low;
+		for (int j = low; j <= high; j++) {
+			if (arr[j] < 0) {
+				swap(arr, i, j);
+				i++;
+			}
+		}
+		return i;
+	}
+
+	public static void swap(int[] arr, int i, int j) {
+		int temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	}
+}

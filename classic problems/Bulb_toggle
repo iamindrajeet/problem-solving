@@ -1,0 +1,145 @@
+/*
+
+The problem of bulb toggling is an interesting one. Suppose you have a row of bulbs, initially all turned off. You are given a series of queries, each represented by a pair of integers (l, m), which signifies that you need to toggle the state of bulbs from index l to m inclusive (0-indexed). The objective is to find out the total number of bulbs that remain lit after performing all the queries.
+
+Now, let's explain the algorithm used in the code along with pseudocode:
+
+Algorithm Explanation:
+Naive Approach (bulbToggle):
+
+For each query (l, m), iterate over the range from l to m and toggle the state of each bulb.
+Calculate the total number of lit bulbs after performing all queries.
+
+Efficient Approach using Prefix Sum (bulbTogglePrefixSum):
+
+Instead of toggling individual bulbs, we'll maintain an array representing the change in state for each bulb.
+We'll use a prefix sum technique to efficiently calculate the final state of each bulb after all queries.
+We'll initialize an array diffArray to store the difference in state for each index (0 or 1).
+For each query (l, m), increment diffArray[l] and decrement diffArray[m + 1].
+Then, we'll calculate the prefix sum of diffArray to get the final state of each bulb.
+If the prefix sum at an index is odd, it means the bulb is toggled an odd number of times and will be lit; otherwise, it will remain off.
+Update the state of bulbs based on the prefix sum array.
+Calculate the total number of lit bulbs after performing all queries.
+
+Explanation:
+The naive approach iterates over each query and toggles the state of bulbs within the specified range. It calculates the total lit bulbs afterward.
+
+The efficient approach using prefix sum optimizes the process by maintaining a difference array to represent changes in state caused by queries. It then calculates the prefix sum to determine the final state of each bulb efficiently.
+
+This optimization reduces the time complexity from O(n * q) to O(n + q), where n is the number of bulbs and q is the number of queries, making it much faster, especially for large inputs.
+
+
+PSEUDOCODE-
+
+bulbToggle(bulbs, queries):
+    for each query (l, m) in queries:
+        for i from l to m:
+            toggle the state of bulb at index i
+
+bulbTogglePrefixSum(bulbs, queries):
+    initialize an array diffArray of size n + 1 with all elements as 0
+    for each query (l, m) in queries:
+        increment diffArray[l] by 1
+        decrement diffArray[m + 1] by 1
+    initialize an array prefixArray of size n with all elements as 0
+    prefixArray[0] = diffArray[0]
+    for i from 1 to n - 1:
+        prefixArray[i] = prefixArray[i - 1] + diffArray[i]
+    for each bulb in bulbs:
+        if prefixArray[i] is odd:
+            toggle the state of the bulb
+
+*/
+
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class BulbToggle {
+
+	static int n = 1000000;
+	static int q = 10000;
+	static List<Integer> bulbs = new ArrayList<>();
+	static List<Integer> bulbs2 = new ArrayList<>();
+
+	public static void main(String[] args) {
+		Random random = new Random();
+
+		for (int i = 0; i < n; i++) {
+			bulbs.add(random.nextInt(2));
+			bulbs2.add(bulbs.get(i));
+		}
+
+		List<Pair<Integer, Integer>> queries = new ArrayList<>();
+		for (int i = 0; i < q; i++) {
+			int l = random.nextInt(n);
+			int m = random.nextInt(n - l) + l;
+			queries.add(new Pair<>(l, m));
+		}
+
+		bulbToggle(bulbs, queries);
+		bulbTogglePrefixSum(bulbs2, queries);
+	}
+
+	// brute force approach -- T.C - O(n * q)
+	static void bulbToggle(List<Integer> bulbs, List<Pair<Integer, Integer>> queries) {
+		long startTime = System.currentTimeMillis();
+		for (Pair<Integer, Integer> query : queries) {
+			int l = query.getKey();
+			int m = query.getValue();
+			for (int i = l; i <= m; i++) {
+				bulbs.set(i, 1 - bulbs.get(i));
+			}
+		}
+		System.out
+				.println("Time taken by bulbToggle is " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+		System.out.println("Total lit bulbs: " + bulbs.stream().mapToInt(Integer::intValue).sum());
+	}
+
+	// Efficient Approach using Prefix Sum -- T.C - O(n + q)
+	static void bulbTogglePrefixSum(List<Integer> bulbs, List<Pair<Integer, Integer>> queries) {
+		long startTime = System.currentTimeMillis();
+		int[] diffArray = new int[n + 1];
+
+		for (Pair<Integer, Integer> query : queries) {
+			int l = query.getKey();
+			int m = query.getValue();
+			diffArray[l]++;
+			diffArray[m + 1]--;
+		}
+
+		int[] prefixArray = new int[n];
+		prefixArray[0] = diffArray[0];
+		for (int i = 1; i < n; i++) {
+			prefixArray[i] = prefixArray[i - 1] + diffArray[i];
+		}
+
+		for (int i = 0; i < prefixArray.length; i++) {
+			if (prefixArray[i] % 2 != 0) {
+				bulbs.set(i, 1 - bulbs.get(i));
+			}
+		}
+		System.out.println(
+				"Time taken by bulbTogglePrefixSum is " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+		System.out.println("Total lit bulbs: " + bulbs.stream().mapToInt(Integer::intValue).sum());
+	}
+
+	static class Pair<K, V> {
+		private final K key;
+		private final V value;
+
+		public Pair(K key, V value) {
+			this.key = key;
+			this.value = value;
+		}
+
+		public K getKey() {
+			return key;
+		}
+
+		public V getValue() {
+			return value;
+		}
+	}
+}

@@ -1,0 +1,32 @@
+/*
+
+Sliding Window Algorithm is a technique used for solving problems where we are required to find a subarray, subsequence, or some sort of substring that satisfies certain constraints. It involves creating a window that slides over the given array or string to find the desired solution efficiently.
+
+Simple Explanation:
+Imagine you have a window, like a frame, that you move along an array or a string. The size of this window can vary. As you move the window from left to right, you perform some operation or check some condition on the elements inside the window. Based on the result, you may adjust the size of the window or move it further.
+
+Example:
+Let's understand the sliding window algorithm with an example:
+
+Problem: Given an array of integers, find the maximum sum of a subarray of size k.
+
+Example Array: [1, 3, -1, -3, 5, 3, 6, 7]
+Window Size: k = 3
+
+Initial Window: Start with the first three elements [1, 3, -1]. Calculate their sum: 1 + 3 + (-1) = 3.
+Move the Window: Slide the window by one element to the right: [3, -1, -3]. Calculate their sum: 3 + (-1) + (-3) = -1.
+Continue Sliding: Keep sliding the window till you reach the end of the array:
+[3, -1, -3] → sum = -1
+[-1, -3, 5] → sum = 1
+[-3, 5, 3] → sum = 5
+[5, 3, 6] → sum = 14
+[3, 6, 7] → sum = 16
+Result: The maximum sum of a subarray of size 3 is 16.
+
+Key Points:
+The sliding window technique involves maintaining a window of a certain size and moving it over the array or string.
+It can be used to solve problems involving finding subarrays, substrings, or subsequences that meet certain conditions efficiently.
+The window size may remain fixed or vary based on the problem requirements.
+Sliding window algorithms often have linear time complexity, making them efficient for solving large-scale problems.
+
+*/

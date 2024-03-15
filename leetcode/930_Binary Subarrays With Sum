@@ -1,0 +1,44 @@
+/*
+This question falls in pattern where in we need to use map and cummulative sum approach.
+
+Algorithm:
+1. Initialize a HashMap map to store the cumulative sum along with its count.
+2. Initialize cumSum to 0 to keep track of the cumulative sum and result to 0 to store the count of subarrays.
+3. Put the initial cumulative sum 0 into the map with count 1 to signify that it has been seen one time.
+4. Iterate through the elements of the nums array.
+5. Update cumSum by adding the current element.
+6. If map contains cumSum - goal, it means there exist subarrays whose sum equals goal. Increment result by the count of such subarrays stored in the map.
+Put cumSum into the map with its count incremented by 1.
+Return the final result.
+
+Pseudocode
+
+1. Initialize a HashMap map to store the cumulative sum along with its count.
+2. Initialize cumSum to 0, result to 0.
+3. Put (0, 1) into map to signify that 0 has been seen one time.
+4. For each element i in nums:
+     a. Increment cumSum by i.
+     b. If map contains (cumSum - goal):
+           i. Increment result by the count of (cumSum - goal) stored in map.
+     c. Increment the count of cumSum in map.
+5. Return result.
+
+
+*/
+
+class Solution {
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        // creating a hashmap to store the cummulative sum along with it's count
+        Map<Integer, Integer> map = new HashMap<>();
+        int cumSum = 0, result = 0;
+        map.put(0, 1); // adding it signifies that I already have seen this cumSum i.e 0 one time so adding (0, 1)
+        for(var i : nums){
+            cumSum += i;
+            if(map.containsKey(cumSum - goal)){
+                result += map.get(cumSum - goal);
+            }
+            map.put(cumSum, map.getOrDefault(cumSum, 0 ) + 1);
+        }
+        return result;
+    }
+}

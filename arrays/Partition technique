@@ -1,0 +1,66 @@
+/*
+The Partition technique is a fundamental concept in various algorithms and data structures, notably in sorting algorithms like Quick Sort and in problems that involve partitioning arrays or linked lists based on certain criteria. It involves rearranging elements in an array or list such that all elements satisfying a specific condition come before or after a chosen pivot element.
+
+Simple Explanation:
+Imagine you have a group of people standing in a line, and you want to organize them based on their heights. The partition technique is like placing a pivot person in the line, and then arranging the people such that all taller people are on one side of the pivot, and all shorter people are on the other side.
+
+Example:
+Let's understand the partition technique with an example:
+
+Problem: Given an array of integers, rearrange the elements such that all elements less than or equal to a chosen pivot come before it, and all elements greater than the pivot come after it.
+
+
+public class PartitionExample {
+    public int partition(int[] arr, int low, int high) {
+        int pivot = arr[high]; // Choosing the last element as the pivot
+        int i = low - 1; // Index of the smaller element
+        
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++; // Increment index of smaller element
+                swap(arr, i, j); // Swap arr[i] and arr[j]
+            }
+        }
+        
+        swap(arr, i + 1, high); // Swap pivot (arr[high]) with the element at index (i + 1)
+        return i + 1; // Return the partitioning index
+    }
+    
+    private void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    
+    public static void main(String[] args) {
+        PartitionExample example = new PartitionExample();
+        int[] arr = {4, 7, 2, 1, 8, 5, 6};
+        int pivotIndex = example.partition(arr, 0, arr.length - 1);
+        System.out.println("Array after partitioning: " + Arrays.toString(arr));
+        System.out.println("Index of the pivot element: " + pivotIndex);
+    }
+}
+
+
+n this example, the partition method partitions the array such that all elements less than or equal to the pivot (chosen as the last element) are placed before it, and all elements greater than the pivot are placed after it. The method returns the index of the pivot element after partitioning.
+
+Key Points:
+The partition technique involves rearranging elements around a pivot element based on a certain condition.
+It is commonly used in various algorithms like Quick Sort for efficient sorting.
+The choice of pivot can affect the efficiency of the partitioning process.
+The partitioning algorithm typically runs in linear time complexity.
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+*/
