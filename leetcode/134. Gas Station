@@ -1,0 +1,56 @@
+/*
+ Let's break down the algorithm described in the provided code in simple words:
+
+Algorithm Explanation:
+Compute Total Gas and Total Cost:
+
+Iterate through the gas and cost arrays and calculate the total amount of gas and total cost needed to travel the entire circuit.
+Check Feasibility:
+
+If the total amount of gas available (sumOfGasArray) is less than the total cost needed (sumOfCostArray) to travel the circuit, it means it's impossible 
+to complete the circuit. In this case, return -1.
+Determine Feasible Starting Point:
+
+Initialize variables total to track the net gas available and start to store the starting point of the circuit.
+Iterate through the gas and cost arrays again.
+At each station, subtract the cost of traveling from the gas available and update the total.
+If total becomes negative at any station, it indicates that starting from the current station is not feasible, as the gas available is not sufficient to 
+cover the cost from the previous stations. In this case, reset total to 0 and update the start index to the next station.
+Return the Feasible Starting Point:
+
+After completing the iteration, the value stored in start represents the index of the starting point from which the circuit can be completed. Return this index.
+Intuition:
+The algorithm checks whether it's feasible to complete the circuit by comparing the total gas available with the total cost required. If the total gas 
+is less than the total cost, it's impossible to complete the circuit.
+It then iterates through the gas stations, calculating the net gas available after deducting the cost of traveling from each station. If the net gas 
+becomes negative at any station, it means starting from the previous station is not feasible, so it updates the starting point to the current station and 
+resets the net gas available to 0.
+Finally, it returns the starting point from which the circuit can be completed, if feasible, or -1 otherwise.
+This algorithm efficiently determines the starting point to complete the circuit, considering the net gas available at each station 
+and ensuring that the circuit can be completed without running out of gas.
+*/
+
+
+
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int lengthOfGasArray = gas.length;
+        int sumOfGasArray = 0, sumOfCostArray = 0;
+        for(int i = 0; i < lengthOfGasArray; i++){
+            sumOfGasArray += gas[i];
+            sumOfCostArray += cost[i];
+        }
+        if(sumOfGasArray < sumOfCostArray)
+            return -1;
+        int total = 0;
+        int start = 0;   
+        for(int i = 0; i < lengthOfGasArray; i++){
+            total += gas[i] - cost[i];
+            if(total < 0){
+                total = 0;
+                start = i + 1;
+            }
+        }
+        return start;
+    }
+}

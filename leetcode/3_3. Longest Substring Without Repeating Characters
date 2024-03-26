@@ -1,0 +1,54 @@
+/*
+This algorithm is used to find the length of the longest substring without repeating characters in a given string.
+
+Here's how it works:
+
+We initialize two pointers, left and right, both pointing to the start of the string.
+We also initialize a variable ans to store the length of the longest substring found so far. We initialize it to Integer.MIN_VALUE to handle the case when the string is empty.
+We maintain a set called seen to keep track of the characters we have seen so far in the current substring.
+We iterate through the string from left to right using the right pointer.
+For each character at right:
+If the character is not present in the seen set, we add it to the set and move the right pointer one step to the right.
+If the character is already present in the seen set, it means we have encountered a repeating character. In this case, we remove the character at left from the seen set and move the left pointer one step to the right until the character at right is no longer in the seen set. This effectively contracts the current substring window.
+While performing the above step, we update the ans variable to store the length of the longest substring found so far, which is right - left + 1.
+We continue this process until the right pointer reaches the end of the string.
+Finally, we return the value stored in the ans variable, which represents the length of the longest substring without repeating characters.
+Let's illustrate this with an example:
+
+Consider the string "abcabcbb".
+
+Initially, both left and right are at index 0.
+As we iterate through the string:
+At index 0, we add 'a' to the seen set. ans is updated to 1.
+At index 1, we add 'b' to the seen set. ans is updated to 2.
+At index 2, we add 'c' to the seen set. ans is updated to 3.
+At index 3, we encounter the repeating character 'a'. We remove 'a' from the seen set and move left to index 1.
+At index 4, we add 'a' to the seen set. ans is updated to 3 (since the substring is "bca").
+We continue this process until right reaches the end of the string.
+Finally, we return the value 3, which is the length of the longest substring without repeating characters ("abc").
+This algorithm effectively finds the length of the longest substring without repeating characters in linear time complexity.
+
+*/
+
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if(s.isEmpty())
+            return 0;
+        int right = 0, left = 0;
+        int ans = Integer.MIN_VALUE;
+        Set<Character> seen = new HashSet<>();
+        while(right < s.length()){
+            while(seen.contains(s.charAt(right))){
+                seen.remove(s.charAt(left));
+                left++;
+            }
+            if(right - left + 1 > ans){
+                ans = right - left + 1;
+            }
+            seen.add(s.charAt(right));
+            right++;
+        }
+        return ans;
+    }
+}

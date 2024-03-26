@@ -1,0 +1,87 @@
+/*
+ * Example:
+String S = "aabacbebebe", K = 3
+
+Initialize variables:
+
+n: length of string S (n = 12 in this case)
+maxLen: maximum length of substring with K distinct characters (initialize to -1)
+left: left pointer of the sliding window (starts at index 0)
+charCount: a HashMap to store the count of characters in the current window
+Start traversing the string S with the right pointer:
+
+Initialize the right pointer at index 0.
+While iterating through the string:
+Update the count of the character at the current right pointer position in the charCount HashMap.
+Check if the number of distinct characters in the current window exceeds K.
+If it exceeds K, move the left pointer to maintain exactly K distinct characters in the window.
+Update maxLen whenever a window with exactly K distinct characters is found.
+Let's go through the iteration:
+
+At right = 0: S[right] = 'a'
+
+Increment count of 'a' in charCount: {'a': 1}
+No need to move the left pointer yet.
+At right = 1: S[right] = 'a'
+
+Increment count of 'a' in charCount: {'a': 2}
+No need to move the left pointer yet.
+At right = 2: S[right] = 'b'
+
+Increment count of 'b' in charCount: {'a': 2, 'b': 1}
+No need to move the left pointer yet.
+At right = 3: S[right] = 'a'
+
+Increment count of 'a' in charCount: {'a': 3, 'b': 1}
+No need to move the left pointer yet.
+At right = 4: S[right] = 'c'
+
+Increment count of 'c' in charCount: {'a': 3, 'b': 1, 'c': 1}
+The number of distinct characters (3) exceeds K (3). So, move the left pointer.
+Move the left pointer (left) to maintain exactly K distinct characters:
+
+Decrease the count of 'a' in charCount: {'a': 2, 'b': 1, 'c': 1}
+The left pointer moves to index 1.
+Continue this process until the end of the string.
+
+After traversing the entire string, we will have the maximum length of the substring with exactly K distinct characters stored in maxLen. In this case, maxLen = 7, which represents the length of the substring "cbebebe".
+
+So, the algorithm efficiently finds the length of the longest substring with exactly K distinct characters using the sliding window approach.
+
+*/
+
+
+import java .util.*;
+class Solution {
+    static int longestUniqueSubstr(String s, int k) {
+      //Write your code here
+      int n = s.length();
+      if(s.length() < k){
+        return -1;
+      }
+      
+      int maxLen = -1;
+      int left = 0, right = 0;
+      Map<Character, Integer> seen = new HashMap<>();
+      while(right < n){
+        char ch = s.charAt(right);
+        seen.put(ch, seen.getOrDefault(ch, 0) + 1);
+        while(seen.size() > k){
+          char c = s.charAt(left);
+          seen.put(c, seen.getOrDefault(c, 0) - 1);
+          if(seen.get(c) == 0){
+            seen.remove(c);          
+          }
+          left++;
+        }
+
+        if(seen.size() == k)
+        {
+          maxLen = Math.max(right - left + 1, maxLen);
+        }
+
+        right++;
+      }
+      return maxLen;
+    }
+}

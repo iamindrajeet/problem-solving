@@ -1,0 +1,61 @@
+class Solution {
+    public int findMaxLength(int[] nums) {
+        int n = nums.length;
+        if (n == 1)
+            return 0;
+        
+        HashMap<Integer, Integer> mp = new HashMap<>();
+        int currSum = 0;
+        int maxL = 0;
+        
+        mp.put(0, -1);
+        
+        for (int i = 0; i < n; i++) {
+            currSum += (nums[i] == 1) ? 1 : -1;
+            if (mp.containsKey(currSum)) {
+                maxL = Math.max(maxL, i - mp.get(currSum));
+            } else
+                mp.put(currSum, i);
+        }
+        return maxL;
+    }
+}
+
+
+/*
+
+
+
+This algorithm aims to find the maximum length of a contiguous subarray within the given array nums, where the number of 1s and 0s are equal.
+
+Here's how the algorithm works, explained in simple terms with an example:
+
+Example:
+Consider the input array: nums = [0, 1, 0, 1, 1, 0, 1, 0]
+
+Initialize variables:
+
+currSum: A variable to keep track of the cumulative sum of the elements encountered so far.
+maxL: A variable to store the maximum length of the contiguous subarray with equal number of 1s and 0s.
+mp: A HashMap to store the cumulative sum encountered so far along with their corresponding indices.
+Iterate through the array nums:
+
+For each element in the array:
+If the element is 1, increment currSum by 1. If the element is 0, decrement currSum by 1.
+Check if mp already contains the current currSum. If it does, it means that the subarray from the index stored 
+in mp[currSum] to the current index has equal number of 1s and 0s. Update maxL to the maximum of its current value 
+and the length of this subarray (i - mp[currSum]).
+If mp does not contain the current currSum, store the current currSum along with its index in mp.
+Return maxL as the result.
+
+Explanation:
+For the given example input nums = [0, 1, 0, 1, 1, 0, 1, 0], let's go through the iteration:
+
+Initially, currSum = 0 and maxL = 0.
+At index 0, nums[0] = 0, so we decrement currSum by 1. Now, currSum = -1. We store (0, -1) in mp.
+At index 1, nums[1] = 1, so we increment currSum by 1. Now, currSum = 0. We find that mp contains currSum, and the length of the subarray with equal 1s and 0s is (1 - (-1)) = 2. Update maxL to 2.
+Continuing this process, we update maxL to 4, as we find another occurrence of currSum = 0 at index 5.
+Finally, maxL is returned as the result, which is 4, indicating the maximum length of a contiguous subarray with equal number of 1s and 0s.
+This algorithm efficiently finds the maximum length of such subarray using a HashMap to store the cumulative sum encountered so far and its corresponding index. This allows us to find the length of subarrays with equal number of 1s and 0s as we iterate through the array.
+
+*/

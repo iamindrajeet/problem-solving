@@ -1,0 +1,107 @@
+/*
+
+You are given a string s of length n containing only four kinds of characters: 'Q', 'W', 'E', and 'R'.
+
+A string is said to be balanced if each of its characters appears n / 4 times where n is the length of the string.
+
+Return the minimum length of the substring that can be replaced with any other string of the same length to make s balanced. If s is already balanced, return 0.
+
+ 
+
+Example 1:
+
+Input: s = "QWER"
+Output: 0
+Explanation: s is already balanced.
+Example 2:
+
+Input: s = "QQWE"
+Output: 1
+Explanation: We need to replace a 'Q' to 'R', so that "RQWE" (or "QRWE") is balanced.
+Example 3:
+
+Input: s = "QQQW"
+Output: 2
+Explanation: We can replace the first "QQ" to "ER". 
+ 
+
+Constraints:
+
+n == s.length
+4 <= n <= 105
+n is a multiple of 4.
+s contains only 'Q', 'W', 'E', and 'R'.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+Explanation with an example:
+
+Let's consider the string "WQERWQER".
+
+Initialize variables: n = 8 (length of the string), target = 8/4 = 2, minLen = Integer.MAX_VALUE, and map with counts of each character.
+
+Start sliding window technique:
+
+Initially, left = 0 and right = 0.
+Move right pointer until the substring becomes unbalanced.
+For example, when right = 7, we have "WQERWQE" which is unbalanced as 'W' occurs 3 times.
+Shrink the window:
+
+Move the left pointer until the substring becomes balanced again.
+At left = 0, we have "QERWQE", which is balanced.
+Update minLen if necessary.
+Repeat steps 2 and 3 until the right pointer reaches the end of the string.
+
+Return the minimum length found.
+
+In this case, the shortest balanced substring is "QERWQE" with a length of 6, which is the return value of the function.
+
+*/
+
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public int balancedString(String s) {
+        int n = s.length();
+        int target = n / 4;
+        int minLen = Integer.MAX_VALUE;
+        Map<Character, Integer> map = new HashMap<>();
+        map.put('Q', 0);
+        map.put('W', 0);
+        map.put('E', 0);
+        map.put('R', 0);
+        for (char c : s.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+
+        // if(isBalanced(map, target)){
+        //     return 0;
+        // }
+
+        int left = 0, right = 0;
+        while (right < n) {
+            char ch = s.charAt(right);
+            map.put(ch, map.getOrDefault(ch, 0) - 1);
+            while (left < n && isBalanced(map, target)) {
+                minLen = Math.min(minLen, right - left + 1);
+                char c = s.charAt(left);
+                map.put(c, map.getOrDefault(c, 0) + 1);
+                left++;
+            }
+            right++; 
+        }
+        return minLen == Integer.MAX_VALUE ? 0 : minLen;
+    }
+
+    public boolean isBalanced(Map<Character, Integer> map, int target) {
+        for (int i : map.values()) {
+            if (i > target) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

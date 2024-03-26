@@ -1,0 +1,52 @@
+
+/*
+
+Initialize variables:
+
+maxSum to keep track of the maximum subarray sum.
+currentSum to keep track of the sum of the current subarray.
+set to keep track of distinct elements in the current subarray.
+right to mark the right end of the sliding window.
+Iterate through the array with the left pointer:
+
+For each left pointer position, reset currentSum to 0 and clear the set.
+Move the right pointer to the right while conditions are met:
+right is within the bounds of the array.
+The element at right is not already in the set.
+The size of the set is less than k.
+During this process, add elements to the set and update currentSum accordingly.
+Whenever the size of the set reaches k, update maxSum if currentSum is greater than the current maxSum.
+Move the left pointer to the next position and remove the corresponding element from the set, reducing currentSum accordingly.
+Repeat step 2 until the left pointer reaches the end of the array.
+
+Finally, return maxSum, which represents the maximum subarray sum of all subarrays meeting the given conditions.
+
+In simple words, the algorithm uses a sliding window approach to find subarrays of length k with distinct elements, 
+calculates their sums, and updates the maximum sum found so far. It efficiently traverses the array, considering all possible subarrays, 
+and returns the maximum sum.
+
+*/
+
+class Solution {
+    public long maximumSubarraySum(int[] nums, int k) {
+        long maxSum = 0;
+        long currentSum = 0; 
+        HashSet<Integer> set = new HashSet<>();
+        int right = 0;
+         for (int left = 0; left < nums.length; left++) {
+             while (right < nums.length && !set.contains(nums[right]) && set.size() < k) {
+                 set.add(nums[right]);
+                 currentSum += nums[right];
+                 right++;
+             }
+
+            if (set.size() == k) {
+                maxSum = Math.max(currentSum, maxSum);
+            }
+             set.remove(nums[left]);
+             currentSum -= nums[left];
+        }
+
+        return maxSum;
+    }
+}
